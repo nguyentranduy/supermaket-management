@@ -1,0 +1,14 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 23, 2020
+ */
+package com.fpoly.server.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.fpoly.server.entity.HoaDonChiTiet;
+
+public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, Long> {
+
+}

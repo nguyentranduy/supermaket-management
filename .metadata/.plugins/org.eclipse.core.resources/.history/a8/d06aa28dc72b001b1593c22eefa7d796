@@ -1,0 +1,39 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 18, 2020
+ */
+package com.fpoly.server.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fpoly.server.repository.SanPhamRepository;
+import com.fpoly.server.request.dto.SanPhamRequest;
+import com.fpoly.server.response.dto.SanPhamResponse;
+import com.fpoly.server.service.SanPhamService;
+
+@Service
+public class SanPhamServiceImpl implements SanPhamService {
+	
+	@Autowired
+	private SanPhamRepository repo;
+
+	@Override
+	public SanPhamResponse findOne(String idSanPham, Integer trangThai) {
+		return repo.findOne(idSanPham, trangThai);
+	}
+
+	@Override
+	public SanPhamResponse update(SanPhamRequest sp) {
+		try {
+			repo.update(sp);
+			return repo.findOne(sp.getIdSanPham(), 1);
+		} catch (Exception ex ) {
+			ex.printStackTrace();
+			return null;
+		}
+		
+	}
+
+}

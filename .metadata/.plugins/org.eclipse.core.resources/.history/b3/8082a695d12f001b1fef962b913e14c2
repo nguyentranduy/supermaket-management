@@ -1,0 +1,11 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 23, 2020
+ */
+package com.fpoly.client.model;
+
+public class SanPhamResponse {
+
+
+}

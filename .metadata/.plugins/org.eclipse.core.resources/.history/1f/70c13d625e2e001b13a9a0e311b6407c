@@ -1,0 +1,21 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 23, 2020
+ */
+package com.fpoly.server.response.dto.HoaDonResponse;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+
+public interface HoaDonOriginResponse {
+
+	String getIdHoaDon();
+	String getIdCuaHang();
+	String getIdNguoiDung();
+	String getTenKhachHang();
+	Double getTongTien();
+	// @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss.aaa")
+	@JsonSerialize(using=DateSerializer.class)
+	String getCreatedAt();
+}

@@ -1,0 +1,150 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 18, 2020
+ */
+package com.fpoly.server.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fpoly.server.constant.TrangThaiSanPhamConstants;
+import com.fpoly.server.exception.BadRequestException;
+import com.fpoly.server.exception.notfoundexception.SanPhamNotFoundException;
+import com.fpoly.server.repository.SanPhamRepository;
+import com.fpoly.server.request.dto.SanPhamHDCTRequest;
+import com.fpoly.server.request.dto.SanPhamRequest;
+import com.fpoly.server.response.dto.SanPhamResponse;
+import com.fpoly.server.service.SanPhamService;
+
+@Service
+public class SanPhamServiceImpl implements SanPhamService {
+	
+	@Autowired
+	private SanPhamRepository repo;
+	
+	@Override
+	public SanPhamResponse findOne(String idSanPham, String idCuaHang) {
+		try {
+			return repo.findOne(idSanPham, idCuaHang, TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@Override
+	public SanPhamResponse findByMaVach(String maVach, String idCuaHang) {
+		try {
+			return repo.findByMaVach(maVach, idCuaHang, TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@Override
+	public List<SanPhamResponse> findByNhomHang(Integer idNhomHang, String idCuaHang) {
+		try {
+			return repo.findByNhomHang(idNhomHang, idCuaHang, TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@Override
+	public List<SanPhamResponse> findByIdCuaHang(String idCuaHang) {
+		try {
+			return repo.findByIdCuaHang(idCuaHang, TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@Override
+	public List<SanPhamResponse> findByTenSanPham(String idCuaHang, String tenSanPham) {
+		try {
+			String tenSanPhamRename = "%" + tenSanPham + "%";
+			return repo.findByTenSanPham(idCuaHang, TrangThaiSanPhamConstants.DANG_BAN, tenSanPhamRename);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@Override
+	public List<SanPhamResponse> findSanPhamDuoiDinhMuc(String idCuaHang) {
+		try {
+			return repo.findSanPhamDuoiDinhMuc(idCuaHang, TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@Override
+	public List<SanPhamResponse> findSanPhamVuotDinhMuc(String idCuaHang) {
+		try {
+			return repo.findSanPhamVuotDinhMuc(idCuaHang, TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+
+	@Override
+	public SanPhamResponse update(SanPhamRequest sp) {
+		try {
+			repo.update(sp);
+			return repo.findOne(sp.getIdSanPham(), sp.getIdCuaHang(), TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex ) {
+			ex.printStackTrace();
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+
+	@Override
+	public SanPhamResponse insert(SanPhamRequest sp) {
+		try {
+			repo.insert(sp);
+			return repo.findOne(sp.getIdSanPham(), sp.getIdCuaHang(), TrangThaiSanPhamConstants.DANG_BAN);
+		} catch (Exception ex ) {
+			ex.printStackTrace();
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+
+	@Override
+	@Transactional
+	public Boolean delete(String idSanPham, String idCuaHang) {
+		try {
+			repo.delete(idSanPham, idCuaHang);
+			SanPhamResponse sanPhamDeleted = repo.findOne(idSanPham, idCuaHang, TrangThaiSanPhamConstants.NGUNG_BAN);
+			if (null != sanPhamDeleted)
+				return true;
+			throw new BadRequestException("Bad request exception");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+	
+	SanPhamHDCTRequest toSanPhamHDCT(SanPhamResponse sanPhamResponse) {
+		SanPhamHDCTRequest result = SanPhamHDCTRequest.builder()
+									.setGiaBan(sanPhamResponse.getGiaBan())
+									.setIdLoHang(sanPhamResponse.getIdLoHang())
+									.setIdSanPham(sanPhamResponse.getIdSanPham())
+									.build();
+		return result;
+	}
+	
+	List<SanPhamHDCTRequest> toListSanPhamHDCT(List<SanPhamResponse> listSanPhamResponse) {
+		List<SanPhamHDCTRequest> listResult = new ArrayList<>();
+		for (SanPhamResponse sp : listSanPhamResponse) {
+			SanPhamHDCTRequest item = toSanPhamHDCT(sp);
+			listResult.add(item);
+		}
+		return listResult;
+	}
+
+}

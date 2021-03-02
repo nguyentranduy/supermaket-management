@@ -1,0 +1,68 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 18, 2020
+ */
+package com.fpoly.server.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fpoly.server.exception.BadRequestException;
+import com.fpoly.server.exception.notfoundexception.SanPhamNotFoundException;
+import com.fpoly.server.repository.SanPhamRepository;
+import com.fpoly.server.request.dto.SanPhamRequest;
+import com.fpoly.server.response.dto.SanPhamResponse;
+import com.fpoly.server.service.SanPhamService;
+
+@Service
+public class SanPhamServiceImpl implements SanPhamService {
+	
+	@Autowired
+	private SanPhamRepository repo;
+
+	@Override
+	public SanPhamResponse findOne(String idSanPham, String idCuaHang, Integer trangThai) {
+		try {
+			return repo.findOne(idSanPham, idCuaHang, trangThai);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+		
+	}
+	
+	@Override
+	public SanPhamResponse findByMaVach(String maVach, String idCuaHang, Integer trangThai) {
+		try {
+			return repo.findByMaVach(maVach, idCuaHang, trangThai);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+		
+	}
+	
+	@Override
+	public List<SanPhamResponse> findByNhomHang(Integer idNhomHang, String idCuaHang, Integer trangThai) {
+		try {
+			return repo.findByNhomHang(idNhomHang, idCuaHang, trangThai);
+		} catch (Exception ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+		
+	}
+
+	@Override
+	public SanPhamResponse update(SanPhamRequest sp) {
+		try {
+			repo.update(sp);
+			return repo.findOne(sp.getIdSanPham(), sp.getIdCuaHang(), 1);
+		} catch (Exception ex ) {
+			ex.printStackTrace();
+			throw new BadRequestException("Bad request exception");
+		}
+		
+	}
+
+}

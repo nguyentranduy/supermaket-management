@@ -1,0 +1,50 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 26, 2020
+ */
+package com.fpoly.server.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.fpoly.server.entity.CuaHang;
+import com.fpoly.server.response.dto.CuaHangResponse;
+
+public interface CuaHangRepository extends JpaRepository<CuaHang, Long> {
+	
+	@Query(value = "SELECT ch.idCuaHang, ch.tenCuaHang, ch.idNguoiDung, nd.userName,"
+			+ " nd.hoTen, nd.dienThoai, ch.diaChi, ch.ngayDangKy, ch.trangThai,"
+			+ " ch.updatedBy, ch.updatedAt"
+			+ " FROM cua_hang ch INNER JOIN nguoi_dung nd"
+			+ " ON ch.idNguoiDung = nd.idNguoiDung"
+			+ " WHERE ch.idCuaHang = ?1 AND ch.trangThai = ?2", nativeQuery = true)
+	CuaHangResponse findOne(String idCuaHang, Integer trangThai);
+	
+	@Query(value = "SELECT ch.idCuaHang, ch.tenCuaHang, ch.idNguoiDung, nd.userName,"
+			+ " nd.hoTen, nd.dienThoai, ch.diaChi, ch.ngayDangKy, ch.trangThai,"
+			+ " ch.updatedBy, ch.updatedAt"
+			+ " FROM cua_hang ch INNER JOIN nguoi_dung nd"
+			+ " ON ch.idNguoiDung = nd.idNguoiDung"
+			+ " WHERE ch.idNguoiDung = ?1 AND ch.trangThai = ?2", nativeQuery = true)
+	CuaHangResponse findByIdNguoiDung(String idNguoiDung, Integer trangThai);
+	
+	@Query(value = "SELECT ch.idCuaHang, ch.tenCuaHang, ch.idNguoiDung, nd.userName,"
+			+ " nd.hoTen, nd.dienThoai, ch.diaChi, ch.ngayDangKy, ch.trangThai,"
+			+ " ch.updatedBy, ch.updatedAt"
+			+ " FROM cua_hang ch INNER JOIN nguoi_dung nd"
+			+ " ON ch.idNguoiDung = nd.idNguoiDung"
+			+ " WHERE ch.trangThai = ?1", nativeQuery = true)
+	List<CuaHangResponse> findAllCuaHang(Integer trangThai);
+	
+	@Query(value = "SELECT ch.idCuaHang, ch.tenCuaHang, ch.idNguoiDung, nd.userName,"
+			+ " nd.hoTen, nd.dienThoai, ch.diaChi, ch.ngayDangKy, ch.trangThai,"
+			+ " ch.updatedBy, ch.updatedAt"
+			+ " FROM cua_hang ch INNER JOIN nguoi_dung nd"
+			+ " ON ch.idNguoiDung = nd.idNguoiDung"
+			+ " WHERE ch.idCuaHang = ?1 AND ch.trangThai = ?2", nativeQuery = true)
+	List<CuaHangResponse> findByTenCuaHang(String tenCuaHang, Integer trangThai);
+	
+}

@@ -1,0 +1,17 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 23, 2020
+ */
+package com.fpoly.server.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
+import com.fpoly.server.entity.HoaDon;
+import com.fpoly.server.request.dto.HoaDonRequest;
+
+public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
+
+	void insert(@Param("hd") HoaDonRequest hd);
+}

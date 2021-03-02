@@ -1,0 +1,20 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 24, 2020
+ */
+package com.fpoly.server.response.dto;
+
+public class SanPhamHoaDonResponseImpl {
+	
+	private String idSanPham;
+	private String idCuaHang;
+	private String tenSanPham;
+	private String maVach;
+	private Integer idNhomHang;
+	private Integer idDVT;
+	private String idLoHang;
+	private Integer soLuong;
+	private Double giaBan;
+
+}

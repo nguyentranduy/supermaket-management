@@ -1,0 +1,25 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 19, 2020
+ */
+package com.fpoly.server.constant;
+
+public enum TrangThaiEnum {
+
+	1("Dang ban"), 0("Ngung ban"), -1("Da xoa");
+	
+	private String value;
+	
+	private TrangThaiEnum(String value) {
+		this.value = value;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+}

@@ -1,0 +1,157 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 18, 2020
+ */
+package com.fpoly.server.api;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fpoly.server.exception.BadRequestException;
+import com.fpoly.server.exception.notfoundexception.SanPhamNotFoundException;
+import com.fpoly.server.request.dto.SanPhamRequest;
+import com.fpoly.server.response.dto.SanPhamResponse;
+import com.fpoly.server.service.SanPhamService;
+
+@RestController
+@RequestMapping("/api/sanpham")
+public class SanPhamAPI {
+	
+	@Autowired
+	private SanPhamService service;
+	
+	@GetMapping("/{idSanPham}")
+	public ResponseEntity<?> findOneIsActived(@PathVariable("idSanPham") String idSanPham,
+			@RequestParam(value = "cuahang", required = true) String idCuaHang) {
+		try {
+			SanPhamResponse response = service.findOne(idSanPham, idCuaHang);
+			if (null != response )
+				return ResponseEntity.ok(response);
+			else 
+				throw new SanPhamNotFoundException("SanPhamResponse not found exception");	
+		} catch (SanPhamNotFoundException ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@GetMapping(value = "/find", params = {"cuahang"})
+	public ResponseEntity<?> findByIdCuaHang(@RequestParam(value = "cuahang") String idCuaHang) {
+		try {
+			List<SanPhamResponse> response = service.findByIdCuaHang(idCuaHang);
+			if (null != response )
+				return ResponseEntity.ok(response);
+			else 
+				throw new SanPhamNotFoundException("SanPhamResponse not found exception");	
+		} catch (SanPhamNotFoundException ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@GetMapping(value = "/find", params = {"cuahang", "mavach"})
+	public ResponseEntity<?> findByMaVach(@RequestParam(value = "cuahang") String idCuaHang,
+			@RequestParam(value = "mavach") String maVach) {
+		try {
+			SanPhamResponse response = service.findByMaVach(maVach, idCuaHang);
+			if (null != response )
+				return ResponseEntity.ok(response);
+			else 
+				throw new SanPhamNotFoundException("SanPhamResponse not found exception");	
+		} catch (SanPhamNotFoundException ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@GetMapping(value = "/find", params = {"cuahang", "nhomhang"})
+	public ResponseEntity<?> findByNhomHang(@RequestParam(value = "cuahang") String idCuaHang,
+			@RequestParam(value = "nhomhang") Integer idNhomHang) {
+		try {
+			List<SanPhamResponse> response = service.findByNhomHang(idNhomHang, idCuaHang);
+			if (null != response )
+				return ResponseEntity.ok(response);
+			else 
+				throw new SanPhamNotFoundException("SanPhamResponse not found exception");	
+		} catch (SanPhamNotFoundException ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@GetMapping(value = "/find", params = {"cuahang", "tensanpham"})
+	public ResponseEntity<?> findByTenSanPham(@RequestParam(value = "cuahang") String idCuaHang,
+			@RequestParam(value = "tensanpham") String tenSanPham) {
+		try {
+			List<SanPhamResponse> response = service.findByTenSanPham(idCuaHang, tenSanPham);
+			if (null != response )
+				return ResponseEntity.ok(response);
+			else 
+				throw new SanPhamNotFoundException("SanPhamResponse not found exception");	
+		} catch (SanPhamNotFoundException ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+	
+	@GetMapping(value = "/find", params = {"cuahang", "dinhmuc"})
+	public ResponseEntity<?> findSanPhamVuotDinhMuc(@RequestParam(value = "cuahang") String idCuaHang,
+			@RequestParam(value = "dinhmuc") Integer dinhMuc) {
+		List<SanPhamResponse> response = new ArrayList<>();
+		try {
+			// >= 1: vuot dinh muc
+			// <= 0: duoi dinh muc
+			if (1 <= dinhMuc)
+				response = service.findSanPhamVuotDinhMuc(idCuaHang);	
+			else if (0 >= dinhMuc)
+				response = service.findSanPhamDuoiDinhMuc(idCuaHang);
+			
+			if (null != response )
+				return ResponseEntity.ok(response);
+			else 
+				throw new SanPhamNotFoundException("SanPhamResponse not found exception");	
+		} catch (SanPhamNotFoundException ex) {
+			throw new SanPhamNotFoundException("SanPhamResponse not found exception");
+		}
+	}
+
+	@PostMapping("/")
+	public ResponseEntity<?> createOne(@RequestBody SanPhamRequest sanPhamRequest) {
+		try {
+			SanPhamResponse response = service.insert(sanPhamRequest);
+			return ResponseEntity.ok(response);
+		} catch (BadRequestException ex) {
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+	
+	@PutMapping("/{idSanPham}")
+	public ResponseEntity<?> updateOne(@RequestBody SanPhamRequest sanPhamRequest,
+			@RequestParam(value = "cuahang", required = true) String idCuaHang) {
+		try {
+			SanPhamResponse response = service.update(sanPhamRequest);
+			return ResponseEntity.ok(response);
+		} catch (BadRequestException ex) {
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+
+	@GetMapping(value = "/{idSanPham}", params = {"idnguoidung", "idcuahang"})
+	public ResponseEntity<?> deleteSanPham(@PathVariable("idSanPham") String idSanPham,
+			@RequestParam("idcuahang") String idCuaHang) {
+		try {
+			Boolean response = service.delete(idSanPham, idCuaHang);
+			return ResponseEntity.ok(response);
+		} catch (BadRequestException ex) {
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+	
+}

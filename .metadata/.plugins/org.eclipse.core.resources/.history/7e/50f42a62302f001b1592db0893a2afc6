@@ -1,0 +1,105 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 15, 2020
+ */
+package com.fpoly.server.repository;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fpoly.server.entity.NguoiDung;
+import com.fpoly.server.response.dto.NguoiDungResponse;
+
+@Repository
+public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
+
+	/*
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang,nd.userName,nd.hoTen,nd.hashPassword,nd.email,nd.dienThoai,"
+			+ " nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro, nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong,"
+			+ " nd.updatedAt, nd.updatedBy FROM nguoi_dung AS nd WHERE nd.idNguoiDung = ?1", nativeQuery = true)
+	NguoiDungResponse findOne(Long id);
+	*/
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang, nd.userName, nd.hoTen, nd.hashPassword,"
+			+ " nd.email,nd.dienThoai, nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro,"
+			+ " nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong, nd.updatedAt, nd.updatedBy"
+			+ " FROM nguoi_dung AS nd WHERE nd.idNguoiDung = ?1 AND nd.trangThaiHoatDong = 1", nativeQuery = true)
+	NguoiDungResponse findOne(String idNguoiDung);
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang, nd.userName, nd.hoTen, nd.hashPassword,"
+			+ " nd.email, nd.dienThoai, nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro,"
+			+ " nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong, nd.updatedAt, nd.updatedBy"
+			+ " FROM nguoi_dung AS nd WHERE nd.trangThaiHoatDong = 1", nativeQuery = true)
+	List<NguoiDungResponse> findListAll();
+
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang, nd.userName, nd.hoTen, nd.hashPassword,"
+			+ " nd.email,nd.dienThoai, nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro,"
+			+ " nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong, nd.updatedAt, nd.updatedBy"
+			+ " FROM nguoi_dung AS nd WHERE nd.userName = ?1 AND nd.trangThaiHoatDong = 1", nativeQuery = true)
+	NguoiDungResponse findByUserName(String username);
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang, nd.userName, nd.hoTen, nd.hashPassword,"
+			+ " nd.email, nd.dienThoai, nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro,"
+			+ " nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong, nd.updatedAt, nd.updatedBy"
+			+ " FROM nguoi_dung AS nd WHERE nd.email = ?1 AND nd.trangThaiHoatDong = 1", nativeQuery = true)
+	NguoiDungResponse findByEmail(String email);
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang,nd.userName,nd.hoTen,nd.hashPassword,nd.email,nd.dienThoai,"
+			+ " nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro, nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong,"
+			+ " nd.updatedAt, nd.updatedBy FROM nguoi_dung AS nd WHERE nd.dienThoai = ?1"
+			+ " AND nd.trangThaiHoatDong = 1", nativeQuery = true)
+	NguoiDungResponse findByDienThoai(String dienThoai);
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang,nd.userName,nd.hoTen,nd.hashPassword,nd.email,nd.dienThoai,"
+			+ " nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro, nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong,"
+			+ " nd.updatedAt, nd.updatedBy FROM nguoi_dung AS nd WHERE nd.idCuaHang = ?1"
+			+ " AND nd.trangThaiHoatDong = 1", nativeQuery = true)
+	List<NguoiDungResponse> findByIdCuaHang(String idCuaHang);
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang,nd.userName,nd.hoTen,nd.hashPassword,nd.email,nd.dienThoai,"
+			+ " nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro, nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong,"
+			+ " nd.updatedAt, nd.updatedBy FROM nguoi_dung AS nd WHERE nd.trangThaiKichHoat = ?1", nativeQuery = true)
+	List<NguoiDungResponse> findByTrangThaiKichHoat(Boolean trangThaiKichHoat);
+	
+	@Query(value = "SELECT nd.idNguoiDung, nd.idCuaHang, nd.userName, nd.hoTen, nd.hashPassword,"
+			+ " nd.email, nd.dienThoai, nd.ngayDangKy, nd.lastLogin, nd.idQuanLy, nd.vaiTro,"
+			+ " nd.hinhAnh, nd.trangThaiKichHoat, nd.trangThaiHoatDong, nd.updatedAt, nd.updatedBy"
+			+ " FROM nguoi_dung AS nd WHERE nd.trangThaiHoatDong = ?1", nativeQuery = true)
+	List<NguoiDungResponse> findByTrangThaiHoatDong(Boolean trangThaiHoatDong);
+
+	/*
+	@Modifying
+	@Transactional
+	@Query(value = "INSERT INTO nguoi_dung(idNguoiDung, idCuaHang, userName, hoTen, hashPassword,"
+			+ " email, dienThoai, ngayDangKy, idQuanLy, vaiTro, hinhAnh, trangThaiKichHoat,trangThaiHoatDong,updatedAt,updatedBy)"
+			+ " VALUES (:#{#nd.idNguoiDung},:#{#nd.idCuaHang},:#{#nd.userName},:#{#nd.hoTen},:#{#nd.hashPassword},:#{#nd.email},"
+			+ ":#{#nd.dienThoai},:#{#nd.ngayDangKy},:#{#nd.lastLogin},:#{#nd.idQuanLy},:#{#nd.vaiTro},:#{#nd.hinhAnh},"
+			+ ":#{#nd.trangThaiKichHoat},:#{#nd.trangThaiHoatDong},:#{#nd.updatedAt},:#{#nd.updatedBy})", nativeQuery = true)
+	void save(@Param("nd") NguoiDungRequest nd);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE nguoi_dung SET idCuaHang = :#{#nd.idCuaHang},"
+			+ "userName = :#{#nd.userName},hoTen = :#{#nd.hoTen},hashPassword = :#{#nd.hashPassword},email = :#{#nd.email},"
+			+ "dienThoai = :#{#nd.dienThoai},ngayDangKy = :#{#nd.ngayDangKy},lastLogin = :#{#nd.lastLogin},idQuanLy = :#{#nd.idQuanLy},"
+			+ "vaiTro = :#{#nd.vaiTro},hinhAnh = :#{#nd.hinhAnh},trangThaiKichHoat = :#{#nd.trangThaiKichHoat},"
+			+ "trangThaiHoatDong = :#{#nd.trangThaiHoatDong},updatedAt = :#{#nd.updatedAt},updatedBy = :#{#nd.updatedBy} "
+			+ "WHERE idNguoiDung = :#{#nd.idNguoiDung}", nativeQuery = true)
+	void update(@Param("nd") NguoiDungRequest nd);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM nguoi_dung WHERE idNguoiDung = ?1", nativeQuery = true)
+	void deleteById(String id);
+	
+*/
+	
+}

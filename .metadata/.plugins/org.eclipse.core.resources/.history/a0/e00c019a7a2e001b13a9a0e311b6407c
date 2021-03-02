@@ -1,0 +1,58 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 15, 2020
+ */
+package com.fpoly.server.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fpoly.server.repository.NguoiDungRepository;
+import com.fpoly.server.response.dto.NguoiDungResponse;
+import com.fpoly.server.service.NguoiDungService;
+
+@Service
+public class NguoiDungServiceImpl implements NguoiDungService {
+	
+	@Autowired
+	private NguoiDungRepository repo;
+
+	@Override
+	public List<NguoiDungResponse> findListAll() {
+		return repo.findListAll();
+	}
+
+	@Override
+	public NguoiDungResponse findByUserName(String username) {
+		return repo.findByUserName(username);
+	}
+
+	@Override
+	public NguoiDungResponse findByEmail(String email) {
+		return repo.findByEmail(email);
+	}
+
+	@Override
+	public NguoiDungResponse findByDienThoai(String dienThoai) {
+		return repo.findByDienThoai(dienThoai);
+	}
+
+	@Override
+	public List<NguoiDungResponse> findByIdCuaHang(String idCuaHang) {
+		return repo.findByIdCuaHang(idCuaHang);
+	}
+
+	@Override
+	public List<NguoiDungResponse> findByTrangThaiKichHoat(String trangThaiKichHoat) {
+		return repo.findByTrangThaiKichHoat(trangThaiKichHoat);
+	}
+
+	@Override
+	public List<NguoiDungResponse> findByTrangThaiHoatDong(String trangThaiHoatDong) {
+		return repo.findByTrangThaiHoatDong(trangThaiHoatDong);
+	}
+
+}

@@ -1,0 +1,75 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 15, 2020
+ */
+package com.fpoly.server.api;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fpoly.server.response.dto.NguoiDungResponse;
+import com.fpoly.server.service.NguoiDungService;
+
+@RestController
+@RequestMapping("/api/nguoidung")
+public class NguoiDungAPI {
+
+	@Autowired
+	private NguoiDungService service;
+	
+	@GetMapping("/{idNguoiDung}")
+	public ResponseEntity<?> findOne(@PathVariable("idNguoiDung") String idNguoiDung) {
+		NguoiDungResponse response = service.findOne(idNguoiDung);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/find", params = {"username"})
+	public ResponseEntity<?> findByUserName(@RequestParam("username") String userName) {
+		NguoiDungResponse response = service.findByUserName(userName);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/find", params = {"email"})
+	public ResponseEntity<?> findByEmail(@RequestParam("email") String email) {
+		NguoiDungResponse response = service.findByEmail(email);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/find", params = {"dienthoai"})
+	public ResponseEntity<?> findByDienThoai(@RequestParam("dienthoai") String dienThoai) {
+		NguoiDungResponse response = service.findByDienThoai(dienThoai);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/find", params = {"idcuahang"})
+	public ResponseEntity<?> findByIdCuaHang(@RequestParam("idcuahang") String idCuaHang) {
+		List<NguoiDungResponse> response = service.findByIdCuaHang(idCuaHang);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/find", params = {"trangthaikichhoat"})
+	public ResponseEntity<?> findByTrangThaiKichHoat(@RequestParam("trangthaikichhoat") Boolean trangThaiKichHoat) {
+		List<NguoiDungResponse> response = service.findByTrangThaiKichHoat(trangThaiKichHoat);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/find", params = {"trangthaihoatdong"})
+	public ResponseEntity<?> findByTrangThaiHoatDong(@RequestParam("trangthaihoatdong") Boolean trangThaiHoatDong) {
+		List<NguoiDungResponse> response = service.findByTrangThaiHoatDong(trangThaiHoatDong);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/")
+	public ResponseEntity<?> findAll() {
+		List<NguoiDungResponse> response = service.findAllDTO();
+		return ResponseEntity.ok(response);
+	}
+}

@@ -1,0 +1,61 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 26, 2020
+ */
+package com.fpoly.server.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fpoly.server.constant.TrangThaiHoatDongConstants;
+import com.fpoly.server.exception.notfoundexception.CuaHangNotFoundException;
+import com.fpoly.server.repository.CuaHangRepository;
+import com.fpoly.server.response.dto.CuaHangResponse;
+import com.fpoly.server.service.CuaHangService;
+
+@Service
+public class CuaHangServiceImpl implements CuaHangService {
+	
+	@Autowired
+	private CuaHangRepository repo;
+
+	@Override
+	public CuaHangResponse findOne(String idCuaHang, Boolean trangThai) {
+		try {
+			return repo.findOne(idCuaHang, TrangThaiHoatDongConstants.DANG_HOAT_DONG);
+		} catch (Exception ex) {
+			throw new CuaHangNotFoundException("Cua hang not found exception");
+		}
+	}
+
+	@Override
+	public CuaHangResponse findByIdNguoiDung(String idNguoiDung, Boolean trangThai) {
+		try {
+			return repo.findByIdNguoiDung(idNguoiDung, TrangThaiHoatDongConstants.DANG_HOAT_DONG);
+		} catch (Exception ex) {
+			throw new CuaHangNotFoundException("Cua hang not found exception");
+		}
+	}
+
+	@Override
+	public List<CuaHangResponse> findListAll() {
+		try {
+			return repo.findListAll();
+		} catch (Exception ex) {
+			throw new CuaHangNotFoundException("Cua hang not found exception");
+		}
+	}
+
+	@Override
+	public List<CuaHangResponse> findByTenCuaHang(String tenCuaHang, Boolean trangThai) {
+		try {
+			return repo.findByTenCuaHang(tenCuaHang, TrangThaiHoatDongConstants.DANG_HOAT_DONG);
+		} catch (Exception ex) {
+			throw new CuaHangNotFoundException("Cua hang not found exception");
+		}
+	}
+
+}

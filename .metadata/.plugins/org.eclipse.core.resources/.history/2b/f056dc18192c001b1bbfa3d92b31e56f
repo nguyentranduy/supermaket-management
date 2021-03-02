@@ -1,0 +1,24 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 18, 2020
+ */
+package com.fpoly.server.service;
+
+import java.util.List;
+
+import com.fpoly.server.request.dto.SanPhamRequest;
+import com.fpoly.server.response.dto.SanPhamResponse;
+
+public interface SanPhamService {
+
+	List<SanPhamResponse> findAll(String idCuaHang);
+	SanPhamResponse findOne(String idSanPham, String idCuaHang);
+	SanPhamResponse findByMaVach(String maVach, String idCuaHang);
+	List<SanPhamResponse> findByIdCuaHang(String idCuaHang);
+	List<SanPhamResponse> findByNhomHang(Integer idNhomHang, String idCuaHang);
+	List<SanPhamResponse> findByTenSanPham(String idCuaHang, String tenSanPham);
+	List<SanPhamResponse> findSanPhamDuoiDinhMuc(String idCuaHang);
+	List<SanPhamResponse> findSanPhamVuotDinhMuc(String idCuaHang);
+	SanPhamResponse update(SanPhamRequest sp);
+}

@@ -1,0 +1,16 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 23, 2020
+ */
+package com.fpoly.server.service;
+
+import com.fpoly.server.request.dto.HoaDonRequest;
+import com.fpoly.server.response.dto.HoaDonResponse.HoaDonOriginResponse;
+
+public interface HoaDonService {
+	
+	Boolean insert(HoaDonRequest hoaDonRequest);
+	HoaDonOriginResponse findOne(String idHoaDon, String idCuaHang);
+
+}

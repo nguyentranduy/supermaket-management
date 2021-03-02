@@ -1,0 +1,89 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 18, 2020
+ */
+package com.fpoly.server.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fpoly.server.entity.SanPham;
+import com.fpoly.server.request.dto.SanPhamRequest;
+import com.fpoly.server.response.dto.SanPhamResponse;
+
+public interface SanPhamRepository extends JpaRepository<SanPham, Long>{
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.idSanPham = ?1"
+			+ " AND sp.idCuaHang = ?2 AND sp.trangThai = ?3", nativeQuery = true)
+	SanPhamResponse findOne(String idSanPham, String idCuaHang, Integer trangThai);
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.maVach = ?1"
+			+ " AND sp.idCuaHang = ?2 AND sp.trangThai = ?3", nativeQuery = true)
+	SanPhamResponse findByMaVach(String maVach, String idCuaHang, Integer trangThai);
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.idNhomHang = ?1"
+			+ " AND sp.idCuaHang = ?2 AND sp.trangThai = ?3", nativeQuery = true)
+	List<SanPhamResponse> findByNhomHang(Integer idNhomHang, String idCuaHang, Integer trangThai);
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.idCuaHang = ?1 AND sp.trangThai = ?2", nativeQuery = true)
+	List<SanPhamResponse> findByIdCuaHang(String idCuaHang, Integer trangThai);
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.idCuaHang = ?1 AND sp.trangThai = ?2"
+			+ " AND sp.tenSanPham LIKE ?3", nativeQuery = true)
+	List<SanPhamResponse> findByTenSanPham(String idCuaHang, Integer trangThai, String tenSanPham);
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.idCuaHang = ?1 AND sp.trangThai = ?2"
+			+ " AND sp.soLuong < sp.dinhMucDuoi", nativeQuery = true)
+	List<SanPhamResponse> findSanPhamDuoiDinhMuc(String idCuaHang, Integer trangThai);
+	
+	@Query(value = "SELECT sp.idSanPham, sp.idCuaHang, sp.tenSanPham, sp.maVach, sp.idNhomHang, sp.idDVT,"
+			+ " sp.idNguoiDung, sp.idLoHang, sp.soLuong, sp.giaVon, sp.giaBan, sp.dinhMucTren,"
+			+ " sp.dinhMucDuoi, sp.hinhAnh, sp.trangThai"
+			+ " FROM san_pham AS sp WHERE sp.idCuaHang = ?1 AND sp.trangThai = ?2"
+			+ " AND sp.soLuong > sp.dinhMucTren", nativeQuery = true)
+	List<SanPhamResponse> findSanPhamVuotDinhMuc(String idCuaHang, Integer trangThai);
+	
+	@Modifying(clearAutomatically = true)
+	@Transactional
+	@Query(value = "UPDATE san_pham SET tenSanPham = :#{#sp.tenSanPham}, maVach = :#{#sp.maVach},"
+			+ " idNhomHang = :#{#sp.idNhomHang}, idDVT = :#{#sp.idDVT}, soLuong = :#{#sp.soLuong},"
+			+ " giaBan = :#{#sp.giaBan}, dinhMucDuoi = :#{#sp.dinhMucDuoi},"
+			+ " dinhMucTren = :#{#sp.dinhMucTren}, hinhAnh = :#{#sp.hinhAnh}"
+			+ " WHERE idSanPham = :#{#sp.idSanPham} AND idCuaHang = :#{#sp.idCuaHang}", nativeQuery = true)
+	void update(@Param("sp") SanPhamRequest sp);
+	
+	@Modifying(clearAutomatically = true)
+	@Transactional
+	@Query(value = "INSERT INTO san_pham(idSanPham, idCuaHang, tenSanPham, maVach, idNhomHang,"
+			+ " idDVT, idNguoiDung, soLuong, giaVon, giaBan, dinhMucDuoi, dinhMucTren, hinhAnh, trangThai) VALUES"
+			+ " (:#{#sp.idSanPham}, :#{#sp.idCuaHang}, :#{#sp.tenSanPham}, :#{#sp.maVach},"
+			+ " :#{#sp.idNhomHang}, :#{#sp.idDVT}, :#{#sp.idNguoiDung}, 0, 0, 0,"
+			+ " :#{#sp.dinhMucDuoi}, :#{#sp.dinhMucTren}, :#{#sp.hinhAnh}, 1)", 
+			nativeQuery = true)
+	void insert(@Param("sp") SanPhamRequest sp);
+	
+}

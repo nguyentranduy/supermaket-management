@@ -1,0 +1,78 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 24, 2020
+ */
+package com.fpoly.server.service.impl;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fpoly.server.exception.BadRequestException;
+import com.fpoly.server.exception.notfoundexception.HoaDonNotFoundException;
+import com.fpoly.server.repository.HoaDonChiTietRepository;
+import com.fpoly.server.repository.HoaDonRepository;
+import com.fpoly.server.request.dto.HoaDonChiTietRequest;
+import com.fpoly.server.request.dto.HoaDonRequest;
+import com.fpoly.server.response.dto.HoaDonResponse.HoaDonChiTietOriginResponse;
+import com.fpoly.server.response.dto.HoaDonResponse.HoaDonOriginResponse;
+import com.fpoly.server.response.dto.HoaDonResponse.SanPhamHoaDonResponse;
+import com.fpoly.server.service.HoaDonService;
+import com.fpoly.server.utils.GenerateUniqueIdUtils;
+
+@Service
+public class HoaDonServiceImpl implements HoaDonService {
+	
+	@Autowired
+	private HoaDonRepository hoaDonRepo;
+	
+	@Autowired
+	private HoaDonChiTietRepository hdctRepo;
+	
+	@Autowired
+	private GenerateUniqueIdUtils generateUniqueId;
+
+	@Override
+	@Transactional
+	public Boolean insert(HoaDonRequest hoaDonRequest) {
+		try {
+			hoaDonRequest.setIdHoaDon(generateUniqueId.generateRandomString(20));
+			hoaDonRepo.insert(hoaDonRequest);
+			for (HoaDonChiTietRequest hdctRequest : hoaDonRequest.getListHDCT()) {
+				hdctRequest.setIdHoaDon(hoaDonRequest.getIdHoaDon());
+				hdctRepo.insert(hdctRequest);
+			}
+			return true;
+		} catch (Exception ex) {
+			throw new BadRequestException("Bad request exception");
+		}
+	}
+
+	@Override
+	public HoaDonOriginResponse findOne(String idHoaDon, String idCuaHang) {
+		try {
+			return hoaDonRepo.findOne(idHoaDon, idCuaHang);
+		} catch (Exception ex) {
+			throw new HoaDonNotFoundException("Hoa don not found exception");
+		}
+	}
+
+	@Override
+	public List<HoaDonChiTietOriginResponse> findListHDCTByIdHoaDon(String idHoaDon) {
+		try {
+			return hdctRepo.findByIdHoaDon(idHoaDon);
+		} catch (Exception ex) {
+			throw new HoaDonNotFoundException("Hoa don not found exception");
+		}
+	}
+
+	@Override
+	public List<SanPhamHoaDonResponse> findSanPhamInHDCT(String idHoaDon) {
+		return hdctRepo.findSanPhamInHDCT(idHoaDon);
+	}
+
+}

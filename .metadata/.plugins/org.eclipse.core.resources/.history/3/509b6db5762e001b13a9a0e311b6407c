@@ -1,0 +1,13 @@
+/*
+ *	(C) Copyright 2020. All rights reserved.
+ *	@author duyntps09687
+ *	@date Nov 23, 2020
+ */
+package com.fpoly.server.constant;
+
+public final class TrangThaiNguoiDungConstants {
+
+	public static final Integer DANG_HOAT_DONG = 1;
+	public static final Integer NGUNG_HOAT_DONG = 0;
+	
+}
